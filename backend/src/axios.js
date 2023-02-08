@@ -1,7 +1,7 @@
 import axios from "axios";
 import store from "./store/index.js";
 import router from "./router/index.js";
-import {loadConfigFromFile} from "vite";
+// import {loadConfigFromFile} from "vite";
 
 
 const axiosClient = axios.create({
