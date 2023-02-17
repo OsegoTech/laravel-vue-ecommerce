@@ -1,5 +1,5 @@
 import axios from "axios";
-import store from "./store/index.js";
+import store from "./store";
 import router from "./router/index.js";
 // import {loadConfigFromFile} from "vite";
 
@@ -17,6 +17,7 @@ axiosClient.interceptors.response.use(response => {
     return response
 }, error => {
     if (error.response.status === 401){
+        // store.commit('setToken', null)
         sessionStorage.removeItem('TOKEN')
         router.push({name: 'login'})
     }

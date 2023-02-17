@@ -25,3 +25,10 @@ export function logout({commit}) {
             return response
         })
 }
+
+// export function getProducts({commit}) {
+//     return axiosClient.get('product')
+//         .then(res => {
+//
+//         })
+// }
