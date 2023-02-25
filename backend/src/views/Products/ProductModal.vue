@@ -38,7 +38,7 @@
                                 class="py-3 px-4 flex justify-between items-center"
                             >
                                 <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900">
-                                    {{product.id ? `Update product: "${props.product.title}"` : `Create new Product`}}
+                                    {{product.id ? `Update product: "${props.product.title}"` : 'Create new Product'}}
                                 </DialogTitle>
                                 <button
                                     @click="closeModal"
@@ -50,10 +50,10 @@
 
                                 </button>
                             </header>
-                            <form @submit.prevent="onsubmit">
+                            <form @submit.prevent="onSubmit">
                                 <div class="bg-white px-4 pt-5 pb-4">
                                     <CustomInput class="mb-2" v-model="product.title" label="Product Title"/>
-                                    <CustomInput type="file" class="mb-2" v-model="product.image" label="Product Image" @change="file => product.image"/>
+                                    <CustomInput type="file" class="mb-2" v-model="product.image" label="Product Image" @change="file => product.image = file"/>
                                     <CustomInput type="textarea" class="mb-2" v-model="product.description" label="Description" />
                                     <CustomInput type="number" class="mb-2" v-model="product.price" label="Price" prepend="$" />
                                 </div>
@@ -114,7 +114,7 @@ const props = defineProps({
     }
 })
 
-const emit = defineEmits(['update: modelValue', 'close'])
+const emit = defineEmits(['update:modelValue', 'close'])
 
 const show = computed({
     get: () => props.modelValue,
@@ -123,11 +123,11 @@ const show = computed({
 
 onUpdated(() => {
     product.value = {
-        id:props.product.id,
-        title:props.product.title,
-        image:props.product.image,
-        description:props.product.description,
-        price:props.product.price,
+        id: props.product.id,
+        title:  props.product.title,
+        image:  props.product.image,
+        description:    props.product.description,
+        price:  props.product.price,
     }
 })
 
