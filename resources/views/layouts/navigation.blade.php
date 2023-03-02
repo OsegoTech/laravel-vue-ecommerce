@@ -3,7 +3,8 @@
     class="flex justify-between bg-slate-800 shadow-md text-white"
 >
     <div>
-        <a href="/src" class="block py-navbar-item pl-5"> Logo </a>
+{{--        {{route('home')}}--}}
+        <a href="" class="block py-navbar-item pl-5"> Logo </a>
     </div>
     <!-- Responsive Menu -->
     <div
@@ -155,30 +156,37 @@
                                     d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
                                 />
                             </svg>
-                            My Orders
+                            My Bids
                         </a>
                     </li>
                     <li class="hover:bg-slate-900">
-                        <a
-                            href="/src/logout.html"
-                            class="flex items-center px-3 py-2 hover:bg-slate-900"
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="h-5 w-5 mr-2"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                stroke-width="2"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                                />
-                            </svg>
-                            Logout
-                        </a>
+{{--                        Authentication--}}
+                        <form action="{{route('logout')}}" method="post">
+                            @csrf
+                            <a href="{{ route('logout') }}"
+                               class="flex items-center px-3 py-2 hover:bg-slate-900"
+                               onclick="event.preventDefault();
+                                        this.closest('form').submit();">
+
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="h-5 w-5 mr-2"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                                    />
+                                </svg>
+                                {{__('Log Out')}}
+                            </a>
+
+                        </form>
+
                     </li>
                 </ul>
             </li>
@@ -205,9 +213,9 @@
                     Login
                 </a>
             </li>
-                <li class="{{ route('register') }}">
+                <li class="px-3 py-3">
                 <a
-                    href="/src/signup.html"
+                    href="{{route('register')}}"
                     class="block text-center text-white bg-emerald-600 py-2 px-3 rounded shadow-md hover:bg-emerald-700 active:bg-emerald-800 transition-colors w-full"
                 >
                     Register now
@@ -248,7 +256,7 @@
                     ></small>
                 </a>
             </li>
-            @if(Auth::guest())
+            @if(!Auth::guest())
             <li x-data="{open: false}" class="relative">
                 <a
                     @click="open = !open"
@@ -369,7 +377,11 @@
                     <li>
                         <form action="{{ route('logout') }}" method="post">
                             @csrf
-                            <button type="submit" class="flex px-3 py-2 hover:bg-slate-900">
+                            <a href="{{ route('logout') }}"
+                               class="flex px-3 py-2 hover:bg-slate-900"
+                               onclick="event.preventDefault();
+                                        this.closest('form').submit();"
+                            >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     class="h-5 w-5 mr-2"
@@ -384,8 +396,8 @@
                                         d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
                                     />
                                 </svg>
-                                Logout
-                            </button>
+                                {{__('Log Out')}}
+                            </a>
                         </form>
                     </li>
                 </ul>
