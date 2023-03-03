@@ -1,6 +1,16 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
+<x-app-layout>
+    <form method="POST" action="{{ route('register') }}" class="w-[400px] mx-auto p-6 my-16">
         @csrf
+        <h2 class="text-2xl font-semibold text-center mb-4">Create an account</h2>
+        <p class="text-center text-gray-500 mb-3">
+            or
+            <a
+                href="{{ route('login') }}"
+                class="text-sm text-purple-700 hover:text-purple-600"
+            >
+                login with existing account
+            </a>
+        </p>
 
         <!-- Name -->
         <div>
@@ -40,13 +50,9 @@
         </div>
 
         <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
-            </a>
-
             <x-primary-button class="ml-4">
                 {{ __('Register') }}
             </x-primary-button>
         </div>
     </form>
-</x-guest-layout>
+</x-app-layout>
