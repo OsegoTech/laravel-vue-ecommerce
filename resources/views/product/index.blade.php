@@ -14,16 +14,16 @@
           })"
             class="border border-1 border-gray-200 rounded-md hover:border-purple-600 transition-colors bg-white"
         >
-            <a href="{{$product->image}}" class="block overflow-hidden">
+            <a href="{{route('product.view', $product->slug)}}" class="block overflow-hidden">
                 <img
-                    src="/src/img/1_1.jpg"
-                    alt=""
+                    src="{{$product->image}}
+                    alt=" {{$product->title}}"
                     class="rounded-lg hover:scale-105 hover:rotate-1 transition-transform"
                 />
             </a>
             <div class="p-4">
                 <h3 class="text-lg">
-                    <a href="/src/product.html">
+                    <a href="{{route('product.view', $product->slug)}}">
                         {{$product->title}}
                     </a>
                 </h3>
