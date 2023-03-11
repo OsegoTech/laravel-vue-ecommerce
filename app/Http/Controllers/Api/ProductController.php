@@ -7,7 +7,8 @@ use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductListResource;
 use App\Http\Resources\ProductResource;
 use App\Models\Api\Product;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+//use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\http\Request;
 use Illuminate\http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
@@ -18,7 +19,7 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return AnonymousResourceCollection
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -120,7 +121,7 @@ class ProductController extends Controller
     {
         $path = 'images/' . Str::random();
         if (!Storage::exists($path)){
-            Storage::makeDirectory($path, 0755, true );
+            Storage::makeDirectory($path, 0755, true);
         }
         if (!Storage::putFileAs('public/' . $path, $image, $image->getClientOriginalName())){
             throw new \Exception("Unable to save file \"{$image->getClientOriginalName()}\"");
