@@ -3,6 +3,7 @@ import './bootstrap';
 import Alpine from 'alpinejs';
 import persist from '@alpinejs/persist'
 import collapse from '@alpinejs/collapse'
+import {post} from "./http.js";
 Alpine.plugin(persist)
 Alpine.plugin(collapse)
 
@@ -11,20 +12,6 @@ window.Alpine = Alpine;
 
 
 document.addEventListener("alpine:init", () => {
-    Alpine.store("header", {
-        cartItemsObject: Alpine.$persist({}),
-        watchingItems: Alpine.$persist([]),
-        get watchlistItems() {
-            return this.watchingItems.length;
-        },
-        get cartItems() {
-            return Object.values(this.cartItemsObject).reduce(
-                (accum, next) => accum + parseInt(next.quantity),
-                0
-            );
-        },
-    });
-
     Alpine.data("toast", () => ({
         visible: false,
         delay: 5000,
@@ -68,56 +55,39 @@ document.addEventListener("alpine:init", () => {
 
     Alpine.data("productItem", (product) => {
         return {
-            id: product.id,
             product,
-            quantity: 1,
-            get watchlistItems() {
-                return this.$store.watchlistItems;
-            },
-            addToWatchlist() {
-                if (this.isInWatchlist()) {
-                    this.$store.header.watchingItems.splice(
-                        this.$store.header.watchingItems.findIndex(
-                            (p) => p.id === product.id
-                        ),
-                        1
-                    );
-                    this.$dispatch("notify", {
-                        message: "The item was removed from your watchlist",
-                    });
-                } else {
-                    this.$store.header.watchingItems.push(product);
-                    this.$dispatch("notify", {
-                        message: "The item was added into the watchlist",
-                    });
-                }
-            },
-            isInWatchlist() {
-                return this.$store.header.watchingItems.find(
-                    (p) => p.id === product.id
-                );
-            },
-            addToCart(id, quantity = 1) {
-                this.$store.header.cartItemsObject[id] = this.$store.header
-                    .cartItemsObject[id] || { ...product, quantity: 0 };
-                this.$store.header.cartItemsObject[id].quantity =
-                    parseInt(this.$store.header.cartItemsObject[id].quantity) + parseInt(quantity);
-                this.$dispatch("notify", {
-                    message: "The item was added into the cart",
-                });
+            addToCart(quantity = 1) {
+                post(this.product.addToCartUrl, {quantity})
+                    .then(result => {
+                        this.$dispatch('cart-change', {count: result.count})
+                        this.$dispatch("notify", {
+                            message: "The item was added into the cart"
+                        })
+                    })
+                    .catch(response => {
+                        console.log(response)
+                    })
             },
             removeItemFromCart() {
-                delete this.$store.header.cartItemsObject[this.id];
-                this.$dispatch("notify", {
-                    message: "The item was removed from cart",
-                });
+                post(this.product.removeUrl)
+                    .then(result => {
+                        this.$dispatch("notify", {
+                            message: "The item was removed from the cart"
+                        });
+                        this.$dispatch('cart-change', {count: result.count})
+                        this.cartItems = this.cartItems.filter(p => p.id !== product.id)
+                    })
             },
-            removeFromWatchlist() {
-                this.$store.header.watchingItems.splice(
-                    this.$store.header.watchingItems.findIndex((p) => p.id === this.id),
-                    1
-                );
-            },
+
+            changeQuantity(){
+                post(this.product.updateQuantityUrl, {quantity: product.quantity})
+                    .then(result => {
+                        this.$dispatch('cart-change', {count: result.count})
+                        this.$dispatch("notify", {
+                            message: "The item quantity was updated"
+                        })
+                    })
+            }
         };
     });
 
