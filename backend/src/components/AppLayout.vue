@@ -1,59 +1,57 @@
 <template>
     <div v-if="currentUser.id" class="flex min-h-full bg-gray-200">
-<!--        Sidebar-->
-        <Sidebar :class="{'-ml-[200px]' : !sidebarOpened}"/>
-<!--        end of sidebar-->
+        <!--        Sidebar-->
+        <Sidebar :class="{ '-ml-[200px]': !sidebarOpened }" />
+        <!--        end of sidebar-->
         <div class="flex-1">
             <Navbar @toggle-sidebar="toggleSidebar"></Navbar>
 
-<!--            Content-->
+            <!--            Content-->
             <main class="p-6">
-               <div class="p-4 rounded bg-white">
-                   <router-view></router-view>
-               </div>
+                <div class="p-4 rounded bg-white">
+                    <router-view></router-view>
+                </div>
             </main>
-<!--            End of Content-->
+            <!--            End of Content-->
         </div>
     </div>
     <div v-else class="min-h-full bg-gray-200 flex items-center justify-center">
-        <Spinner/>
+        <Spinner />
     </div>
 </template>
 
 <script setup>
-import {ref, onMounted, onUnmounted, computed} from 'vue'
-    import Sidebar from "./Sidebar.vue";
-    import Navbar from "./Navbar.vue";
-    import state from "../store/index.js";
+import { ref, onMounted, onUnmounted, computed } from "vue";
+import Sidebar from "./Sidebar.vue";
+import Navbar from "./Navbar.vue";
+import state from "../store/index.js";
 import Spinner from "./core/Spinner.vue";
 import store from "../store/index.js";
 
-    const { title } = defineProps({
-        title: String
-    })
+const { title } = defineProps({
+    title: String,
+});
 
-    const sidebarOpened = ref(true)
-    const currentUser = computed(() => store.state.user.data)
+const sidebarOpened = ref(true);
+const currentUser = computed(() => store.state.user.data);
 
-    function toggleSidebar(){
-        sidebarOpened.value= !sidebarOpened.value
-    }
+function toggleSidebar() {
+    sidebarOpened.value = !sidebarOpened.value;
+}
 
-    onMounted(() => {
-        store.dispatch('getUser')
-        handleSidebarOpened()
-        window.addEventListener('resize', handleSidebarOpened)
-    })
+onMounted(() => {
+    store.dispatch("getUser");
+    handleSidebarOpened();
+    window.addEventListener("resize", handleSidebarOpened);
+});
 
-    onUnmounted(() => {
-        window.removeEventListener('resize', handleSidebarOpened)
-    })
+onUnmounted(() => {
+    window.removeEventListener("resize", handleSidebarOpened);
+});
 
-    function handleSidebarOpened(){
-       sidebarOpened.value = window.outerWidth > 768
-    }
+function handleSidebarOpened() {
+    sidebarOpened.value = window.outerWidth > 768;
+}
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
