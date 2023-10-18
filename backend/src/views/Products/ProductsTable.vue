@@ -1,4 +1,7 @@
 <template>
+    <!-- <pre>
+        {{products}}
+    </pre> -->
     <div class="bg-white p-4 rounded-lg shadow animate-fade-in-down">
         <div class="flex justify-between border-b-2 pb-3">
             <div class="flex items-center">
@@ -39,7 +42,7 @@
             <tbody v-if="products.loading">
             <tr >
                 <td colspan="5">
-                    <Spinner class="my-4 text-center" v-if="products.loading"/>
+                    <Spinner class="my-4 mx-auto" v-if="products.loading"/>
                 </td>
             </tr>
             </tbody>
@@ -47,6 +50,7 @@
             <tr v-for="(product, index) of products.data" >
                 <td class="border-b-2">{{product.id}}</td>
                 <td class="border-b-2">
+                    <!-- <img class="w-16" :src="'http://localhost:8000' +product.image_url" :alt="product.title"> -->
                     <img class="w-16" :src="product.image_url" :alt="product.title">
                 </td>
                 <td

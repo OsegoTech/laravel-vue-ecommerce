@@ -1,4 +1,4 @@
-const state = {
+ const state = {
     user: {
         token: sessionStorage.getItem('TOKEN'),
         data: {}

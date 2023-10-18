@@ -53,13 +53,25 @@ class ProductController extends Controller
     /** @var UploadedFile $image */
         $image = $data['image'] ?? null;
 
-//        Check is image was given and save on local file system
-        if ($image){
-            $relativePath = $this->saveImage($image);
-            $data['image'] = URL::to(Storage::url($relativePath));
-            $data['image_mime'] = $image->getClientMimeType();
-            $data['image_size'] = $image->getSize();
+    //    Check is image was given and save on local file system
+        // if ($image){
+        //     $relativePath = $this->saveImage($image);
+        //     $data['image'] = URL::to(Storage::url($relativePath));
+        //     $data['image_mime'] = $image->getClientMimeType();
+        //     $data['image_size'] = $image->getSize();
+        // }
+
+        if ($image) {
+            $fileName = time().'_'.$image->getClientOriginalName();
+            $filePath = $image->storeAs('uploads', $fileName, 'public');
+            $image = '/storage/' . $filePath;
+            $data['image'] = $image;
         }
+
+
+
+
+        
         $product = Product::create($data);
         return new ProductResource($product);
     }
@@ -120,12 +132,13 @@ class ProductController extends Controller
     private function saveImage(UploadedFile $image)
     {
         $path = 'images/' . Str::random();
-        if (!Storage::exists($path)){
+        if (!Storage::exists($path)) {
             Storage::makeDirectory($path, 0755, true);
         }
-        if (!Storage::putFileAs('public/' . $path, $image, $image->getClientOriginalName())){
+        if (!Storage::putFileAS('public/' . $path, $image, $image->getClientOriginalName())) {
             throw new \Exception("Unable to save file \"{$image->getClientOriginalName()}\"");
         }
+
         return $path . '/' . $image->getClientOriginalName();
     }
 }

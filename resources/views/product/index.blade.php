@@ -3,6 +3,7 @@
     <div
         class="grid gap-8 grig-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 p-5"
     >
+    
         @foreach($products as $product)
         <!-- Product Item -->
         <div
@@ -17,7 +18,7 @@
         >
             <a href="{{route('product.view', $product->slug)}}" class="block overflow-hidden">
                 <img
-                    src="{{$product->image}}
+                    src="{{$product->image}}"
                     alt=" {{$product->title}}"
                     class="rounded-lg hover:scale-105 hover:rotate-1 transition-transform"
                 />

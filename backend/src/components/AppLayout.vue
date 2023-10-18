@@ -24,7 +24,6 @@
 import { ref, onMounted, onUnmounted, computed } from "vue";
 import Sidebar from "./Sidebar.vue";
 import Navbar from "./Navbar.vue";
-import state from "../store/index.js";
 import Spinner from "./core/Spinner.vue";
 import store from "../store/index.js";
 

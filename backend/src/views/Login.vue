@@ -1,7 +1,7 @@
 <template>
     <GuestLayout title="Sign in to your Account">
         <form class="mt-8 space-y-6" @submit.prevent="login" method="POST">
-            <div v-if="errorMsg" class="flex items-center justify-center py-3 px-5 bg-red-500 text-white rounded">
+            <div v-if="errorMsg" class="flex items-center justify-around py-3 px-5 bg-red-500 text-white rounded">
                 {{errorMsg}}
                 <span @click="errorMsg = ''" class="w-8 h-8 flex items-center justify-between rounded-full transition-colors cursor-pointer hover:bg-black/20">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
