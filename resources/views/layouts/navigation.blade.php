@@ -4,7 +4,7 @@
 >
     <div>
 
-        <a href="{{route('home')}}" class="block py-navbar-item pl-5"> Logo </a>
+        <a href="{{route('home')}}" class="block py-navbar-item pl-5"> Tripuo-Mall </a>
     </div>
     <!-- Responsive Menu -->
     <div
@@ -164,7 +164,7 @@
                         <form action="{{route('logout')}}" method="post">
                             @csrf
                             <a href="{{ route('logout') }}"
-                               class="flex items-center px-3 py-2 hover:bg-slate-900"
+                               class="flex w-full items-center px-3 py-2 hover:bg-slate-900"
                                onclick="event.preventDefault();
                                         this.closest('form').submit();">
 
