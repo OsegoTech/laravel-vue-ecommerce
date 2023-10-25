@@ -7,7 +7,7 @@
     class="flex justify-between bg-slate-800 shadow-md text-white"
 >
     <div>
-        <a href="{{ route('home') }}" class="block py-navbar-item pl-5"> Logo </a>
+        <a href="{{ route('home') }}" class="block py-navbar-item pl-5"> Tripuo-Mall </a>
     </div>
     <!-- Responsive Menu -->
     <div
