@@ -1,27 +1,34 @@
 <x-app-layout>
-    <div class="container mx-auto">
-        <div class="grid gap-6 grid-cols-1 lg:grid-cols-1 lg:grid-cols-5">
+    <div  x-data="productItem({{ json_encode([
+                    'id' => $product->id,
+                    'slug' => $product->slug,
+                    'image' => $product->image,
+                    'title' => $product->title,
+                    'price' => $product->price,
+                    'addToCartUrl' => route('cart.add', $product)
+                ]) }})" class="container mx-auto">
+        <div class="grid gap-6 grid-cols-1 lg:grid-cols-5">
             <div class="lg:col-span-3">
                 <div
                     x-data="{
-  images: ['{{$product->image}}'],
-  activeImage: null,
-  prev() {
-      let index = this.images.indexOf(this.activeImage);
-      if (index === 0)
-          index = this.images.length;
-      this.activeImage = this.images[index - 1];
-  },
-  next() {
-      let index = this.images.indexOf(this.activeImage);
-      if (index === this.images.length - 1)
-          index = -1;
-      this.activeImage = this.images[index + 1];
-  },
-  init() {
-      this.activeImage = this.images.length > 0 ? this.images[0] : null
-  }
-}"
+                      images: ['{{$product->image}}'],
+                      activeImage: null,
+                      prev() {
+                          let index = this.images.indexOf(this.activeImage);
+                          if (index === 0)
+                              index = this.images.length;
+                          this.activeImage = this.images[index - 1];
+                      },
+                      next() {
+                          let index = this.images.indexOf(this.activeImage);
+                          if (index === this.images.length - 1)
+                              index = -1;
+                          this.activeImage = this.images[index + 1];
+                      },
+                      init() {
+                          this.activeImage = this.images.length > 0 ? this.images[0] : null
+                      }
+                    }"
                 >
                     <div class="relative">
                         <template x-for="image in images">
@@ -75,7 +82,7 @@
                         <template x-for="image in images">
                             <a
                                 @click.prevent="activeImage = image"
-                                class="cursor-pointer w-[80px] border border-gray-300 hover:border-purple-500 flex items-center justify-center"
+                                class="cursor-pointer w-[80px] h-[80px] border border-gray-300 hover:border-purple-500 flex items-center justify-center"
                                 :class="{'border-purple-600': activeImage === image}"
                             >
                                 <img :src="image" alt="" class="w-auto max-auto max-h-full"/>
@@ -98,11 +105,12 @@
                         name="quantity"
                         x-ref="quantityEl"
                         value="1"
+                        min="1"
                         class="w-32 focus:border-purple-500 focus:outline-none rounded"
                     />
                 </div>
                 <button
-                    @click="addToCart(id, $refs.quantityEl.value)"
+                    @click="addToCart($refs.quantityEl.value)"
                     class="btn-primary py-4 text-lg flex justify-center min-w-0 w-full mb-6"
                 >
                     <svg
@@ -127,7 +135,7 @@
                         x-collapse.min.120px
                         class="text-gray-500 wysiwyg-content"
                     >
-                        {{$product->description}}
+                        {{ $product->description }}
                     </div>
                     <p class="text-right">
                         <a
