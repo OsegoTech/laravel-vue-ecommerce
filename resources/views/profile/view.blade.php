@@ -249,7 +249,7 @@
                     <x-button class="w-full">Update</x-button>
                 </form>
             </div>
-            {{-- <div class="bg-white p-3 shadow rounded-lg">
+            <div class="bg-white p-3 shadow rounded-lg">
                 <form action="{{route('profile_password.update')}}" method="post">
                     @csrf
                     <h2 class="text-xl font-semibold mb-2">Update Password</h2>
@@ -279,7 +279,7 @@
                     </div>
                     <x-button>Update</x-button>
                 </form>
-            </div> --}}
+            </div>
         </div>
     </div>
 </x-app-layout>

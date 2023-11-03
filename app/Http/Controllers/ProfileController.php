@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\AddressType;
+use App\Http\Requests\PasswordUpdateRequest;
 use App\Http\Requests\ProfileRequest;
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\Country;
@@ -10,6 +11,7 @@ use App\Models\CustomerAddress;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
@@ -65,6 +67,17 @@ class ProfileController extends Controller
 
         $request->session()->flash('flash_message', 'Profile updated successfully');
 
+        return redirect()->route('profile');
+    }
+
+    public function passwordUpdate(PasswordUpdateRequest $request)
+    {
+        /** @var \App\Models\User $user */
+        $user = $request->user();
+        $passwordData = $request->validated();
+        $user->password = Hash::make($passwordData['new_password']);
+        $user->save();
+        $request->session()->flash('flash_message', 'Password updated successfully');
         return redirect()->route('profile');
     }
 }
