@@ -12,20 +12,20 @@
                 <form x-data="{
                     countries: {{ json_encode($countries) }},
                     billingAddress: {{ json_encode([
-                        'address1' => old('billing.address1', $billingAddress->address1),
-                        'address2' => old('billing.address2', $billingAddress->address2),
-                        'city' => old('billing.city', $billingAddress->city),
-                        'state' => old('billing.state', $billingAddress->state),
-                        'country_code' => old('billing.country_code', $billingAddress->country_code),
-                        'zipcode' => old('billing.zipcode', $billingAddress->zipcode),
+                        'address1' => old('billing.address1', optional($billingAddress)->address1),
+                        'address2' => old('billing.address2', optional($billingAddress)->address2),
+                        'city' => old('billing.city', optional($billingAddress)->city),
+                        'state' => old('billing.state', optional($billingAddress)->state),
+                        'country_code' => old('billing.country_code', optional($billingAddress)->country_code),
+                        'zipcode' => old('billing.zipcode', optional($billingAddress)->zipcode),
                     ]) }},
                     shippingAddress: {{ json_encode([
-                        'address1' => old('shipping.address1', $shippingAddress->address1),
-                        'address2' => old('shipping.address2', $shippingAddress->address2),
-                        'city' => old('shipping.city', $shippingAddress->city),
-                        'state' => old('shipping.state', $shippingAddress->state),
-                        'country_code' => old('shipping.country_code', $shippingAddress->country_code),
-                        'zipcode' => old('shipping.zipcode', $shippingAddress->zipcode),
+                        'address1' => old('shipping.address1', optional($shippingAddress)->address1),
+                        'address2' => old('shipping.address2', optional($shippingAddress)->address2),
+                        'city' => old('shipping.city', optional($shippingAddress)->city),
+                        'state' => old('shipping.state', optional($shippingAddress)->state),
+                        'country_code' => old('shipping.country_code', optional($shippingAddress)->country_code),
+                        'zipcode' => old('shipping.zipcode', optional($shippingAddress)->zipcode),
                     ]) }},
                     get billingCountryStates() {
                         const country = this.countries.find(c => c.code === this.billingAddress.country_code)
@@ -48,14 +48,14 @@
                         <x-input
                             type="text"
                             name="first_name"
-                            value="{{old('first_name', $customer->first_name)}}"
+                            value="{{old('first_name', optional($customer)->first_name)}}"
                             placeholder="First Name"
                             class="w-full focus:border-purple-600 focus:ring-purple-600 border-gray-300 rounded"
                         />
                         <x-input
                             type="text"
                             name="last_name"
-                            value="{{old('last_name', $customer->last_name)}}"
+                            value="{{old('last_name', optional($customer)->last_name)}}"
                             placeholder="Last Name"
                             class="w-full focus:border-purple-600 focus:ring-purple-600 border-gray-300 rounded"
                         />
@@ -64,7 +64,7 @@
                         <x-input
                             type="text"
                             name="email"
-                            value="{{old('email', $user->email)}}"
+                            value="{{old('email', optional($user)->email)}}"
                             placeholder="Your Email"
                             class="w-full focus:border-purple-600 focus:ring-purple-600 border-gray-300 rounded"
                         />
@@ -73,7 +73,7 @@
                         <x-input
                             type="text"
                             name="phone"
-                            value="{{old('phone', $customer->phone)}}"
+                            value="{{old('phone', optional($customer)->phone)}}"
                             placeholder="Your Phone"
                             class="w-full focus:border-purple-600 focus:ring-purple-600 border-gray-300 rounded"
                         />
@@ -249,7 +249,7 @@
                     <x-button class="w-full">Update</x-button>
                 </form>
             </div>
-            <div class="bg-white p-3 shadow rounded-lg">
+            {{-- <div class="bg-white p-3 shadow rounded-lg">
                 <form action="{{route('profile_password.update')}}" method="post">
                     @csrf
                     <h2 class="text-xl font-semibold mb-2">Update Password</h2>
@@ -279,7 +279,7 @@
                     </div>
                     <x-button>Update</x-button>
                 </form>
-            </div>
+            </div> --}}
         </div>
     </div>
 </x-app-layout>
