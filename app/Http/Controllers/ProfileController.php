@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\AddressType;
+use App\Http\Requests\ProfileRequest;
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\Country;
 use App\Models\CustomerAddress;
@@ -31,5 +32,39 @@ class ProfileController extends Controller
     //    dd($customer);
         $countries = Country::query()->orderBy('name')->get();
         return view('profile.view', compact('customer', 'user', 'shippingAddress', 'billingAddress', 'countries'));
+    }
+
+    public function store(ProfileRequest $request)
+    {
+        $customerData = $request->validated();
+        $shippingData = $customerData['shipping'];
+        $billingData = $customerData['billing'];
+
+        /** @var \App\Models\User $user */
+        $user = $request->user();
+
+        /** @var \App\Models\Customer $customer */
+        $customer = $user->customer;
+        $customer->update($customerData);
+
+        if($customer->shippingAddress){
+            $customer->shippingAddress->update($shippingData);
+        } else {
+            $shippingData['customer_id'] = $customer->user_id;
+            $shippingData['type'] = AddressType::Shipping->value;
+            CustomerAddress::create($shippingData);
+        }
+
+        if($customer->billingAddress){
+            $customer->billingAddress->update($billingData);
+        } else {
+            $billingData['customer_id'] = $customer->user_id;
+            $billingData['type'] = AddressType::Billing->value;
+            CustomerAddress::create($billingData);
+        }
+
+        $request->session()->flash('flash_message', 'Profile updated successfully');
+
+        return redirect()->route('profile');
     }
 }
