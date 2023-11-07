@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -37,7 +38,21 @@ Route::middleware(['auth', 'verified'])->group(function() {
     Route::get('/profile', [ProfileController::class, 'view'])->name('profile');
     Route::post('/profile', [ProfileController::class, 'store'])->name('profile.update');
     Route::post('/profile/password-update', [ProfileController::class, 'passwordUpdate'])->name('profile_password.update');
+    Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
 });
+
+Route::controller(PaymentController::class)
+    ->prefix('payments')
+    ->as('payments')
+    // ->name('payment.')
+    ->group(function(){
+        // Route::get('/token', [PaymentController::class, 'token'])->name('token');
+        Route::get('/initiate-push',  'initiateStkPush')->name('intiate');
+        // Route::post('/charge', [PaymentController::class, 'charge'])->name('charge');
+        // Route::get('/success', [PaymentController::class, 'success'])->name('success');
+        // Route::get('/cancel', [PaymentController::class, 'cancel'])->name('cancel');
+    })
+    ->middleware(['auth', 'verified']);
 
 
 require __DIR__.'/auth.php';

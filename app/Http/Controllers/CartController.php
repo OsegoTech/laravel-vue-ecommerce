@@ -122,4 +122,28 @@ class CartController extends Controller
             return response(['count' => Cart::getCountFromItems($cartItems)]);
         }
     }
+
+    public function checkout(Request $request)
+    {
+        $cartItems = Cart::getCartItems();
+        // dd($cartItems);
+        $ids = Arr::pluck($cartItems, 'product_id');
+        $products = Product::query()->whereIn('id', $ids)->get();
+        // dd($products);
+        $lineItems = [];
+        foreach ($products as $product) {
+            $lineItems[] = [
+                $price_data = [
+                'currency' => 'usd',
+                'product_data' => [
+                    'name' => $product->name,
+                
+                ],
+                'unit_amount'=>2000,
+                
+            ],
+                'quantity' => 1,
+            ];
+        }
+    }
 }

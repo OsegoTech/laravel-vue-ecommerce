@@ -86,10 +86,16 @@
                         <p class="text-gray-500 mb-6">
                             Shipping and taxes calculated at checkout.
                         </p>
-
-                        <button type="submit" class="btn-primary w-full py-3 text-lg">
+                        <form action="{{route('cart.checkout')}}" method="POST">
+                            @csrf
+                            {{-- <input type="hidden" name="cartItems" :value="JSON.stringify(cartItems) --}}
+                            <button type="submit" class="btn-primary w-full py-3 text-lg">
+                                Proceed to Checkout
+                            </button>
+                        </form>
+                        {{-- <button type="submit" class="btn-primary w-full py-3 text-lg">
                             Proceed to Checkout
-                        </button>
+                        </button> --}}
                     </div>
                 </div>
                 <!--/ Product Items -->
