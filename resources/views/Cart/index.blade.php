@@ -88,14 +88,11 @@
                         </p>
                         <form action="{{route('cart.checkout')}}" method="POST">
                             @csrf
-                            {{-- <input type="hidden" name="cartItems" :value="JSON.stringify(cartItems) --}}
                             <button type="submit" class="btn-primary w-full py-3 text-lg">
                                 Proceed to Checkout
                             </button>
                         </form>
-                        {{-- <button type="submit" class="btn-primary w-full py-3 text-lg">
-                            Proceed to Checkout
-                        </button> --}}
+                        
                     </div>
                 </div>
                 <!--/ Product Items -->

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+// require_once 'vendor/autoload.php';
 
 use App\Http\Helpers\Cart;
 use App\Models\CartItem;
@@ -13,11 +14,7 @@ class CartController extends Controller
 {
     public function index()
     {
-        $cartItems = Cart::getCartItems();
-
-        $ids = Arr::pluck($cartItems, 'product_id');
-        $products = Product::query()->whereIn('id', $ids)->get();
-        $cartItems = Arr::keyBy($cartItems, 'product_id');
+        list($products, $cartItems) = Cart::getProductsAndCartItems();
         $total = 0;
         foreach ($products as $product) {
             $total += $product->price * $cartItems[$product->id]['quantity'];
@@ -123,27 +120,6 @@ class CartController extends Controller
         }
     }
 
-    public function checkout(Request $request)
-    {
-        $cartItems = Cart::getCartItems();
-        // dd($cartItems);
-        $ids = Arr::pluck($cartItems, 'product_id');
-        $products = Product::query()->whereIn('id', $ids)->get();
-        // dd($products);
-        $lineItems = [];
-        foreach ($products as $product) {
-            $lineItems[] = [
-                $price_data = [
-                'currency' => 'usd',
-                'product_data' => [
-                    'name' => $product->name,
-                
-                ],
-                'unit_amount'=>2000,
-                
-            ],
-                'quantity' => 1,
-            ];
-        }
-    }
 }
+
+

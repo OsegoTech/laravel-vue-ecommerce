@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
@@ -38,7 +39,9 @@ Route::middleware(['auth', 'verified'])->group(function() {
     Route::get('/profile', [ProfileController::class, 'view'])->name('profile');
     Route::post('/profile', [ProfileController::class, 'store'])->name('profile.update');
     Route::post('/profile/password-update', [ProfileController::class, 'passwordUpdate'])->name('profile_password.update');
-    Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+    Route::post('/checkout', [CheckoutController::class, 'checkout'])->name('cart.checkout');
+    Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
+    Route::get('/checkout/failure', [CheckoutController::class, 'failure'])->name('checkout.failure');
 });
 
 Route::controller(PaymentController::class)
@@ -48,7 +51,7 @@ Route::controller(PaymentController::class)
     ->group(function(){
         // Route::get('/token', [PaymentController::class, 'token'])->name('token');
         Route::get('/initiate-push',  'initiateStkPush')->name('intiate');
-        // Route::post('/charge', [PaymentController::class, 'charge'])->name('charge');
+        Route::post('/stkcallback',  'stkCallback')->name('stkcallback');
         // Route::get('/success', [PaymentController::class, 'success'])->name('success');
         // Route::get('/cancel', [PaymentController::class, 'cancel'])->name('cancel');
     })

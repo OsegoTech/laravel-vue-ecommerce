@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class PaymentController extends Controller
 {
+    // authorization token request from safaricom
     public function token()
     {
         $consumerKey = 'JMH2I4ozADWQ5J0hg3jez1yne9EAGcff';
@@ -26,6 +29,7 @@ class PaymentController extends Controller
     }
 
     public function initiateStkPush()
+    // launch the stk push on the user's phone
     {
         $accessToken = $this->token();
         $url = 'https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest';
@@ -38,7 +42,7 @@ class PaymentController extends Controller
         $PartyA = 254743168819;
         $PartyB = 174379;
         $PhoneNumber = 254743168819;
-        $CallBackURL = 'https://osegotech.github.io/Portfolio/';
+        $CallBackURL = 'https://7067-102-212-236-130.ngrok-free.app/payments/stkcallback';
         $AccountReference = 'Tripuo Verse';
         $TransactionDesc = 'Tripuo Verse Payment for Order';
         $response = Http::withToken($accessToken)
@@ -62,7 +66,9 @@ class PaymentController extends Controller
 
     public function stkCallback()
     {
-
+        dd('Reached stkCallback');
+        $data = file_get_contents('php://input');
+        Storage::disk('local')->put('stk.txt', $data);
     }
 
     public function processStkPush()

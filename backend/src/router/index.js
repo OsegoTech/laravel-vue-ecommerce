@@ -7,6 +7,7 @@ import AppLayout from "../components/AppLayout.vue";
 import Products from "../views/Products/Products.vue";
 import store from "../store/index.js";
 import NotFound from "../views/NotFound.vue";
+import Orders from "../views/Orders/Orders.vue";
 const routes = [
     {
         path: '/app',
@@ -25,6 +26,11 @@ const routes = [
                 path: 'products',
                 name: 'app.products',
                 component: Products
+            },
+            {
+                path: 'orders',
+                name: 'app.orders',
+                component: Orders
             },
         ]
     },
