@@ -24,6 +24,7 @@ class CheckoutController extends Controller
                 
                 ],
                 'unit_amount_decimal'=> $product->price * 100,
+               
                 
             ],
                 'quantity' => $cartItems[$product->id]['quantity'],
@@ -35,6 +36,7 @@ class CheckoutController extends Controller
             'mode' => 'payment',
             'success_url' => route('checkout.success', [], true).'?session_id={CHECKOUT_SESSION_ID}',
             'cancel_url' => route('checkout.failure', [], true),
+            'customer_creation' => 'always',
           ]);
         //   dd($checkout_session->id);
           return redirect($checkout_session->url);
@@ -52,10 +54,10 @@ class CheckoutController extends Controller
             
         // fix the custumer retrieval
         // dd($session);
-        // $customer = $stripe->customers->retrieve($session->customer);
+        $customer = $stripe->customers->retrieve($session->customer);
         // dd($customer);
 
-        // return view('checkout.success', compact('customer'));
+        return view('checkout.success', compact('customer'));
 
         return view('checkout.success');
         } catch (\Exception $e) {
