@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\OrderStatus;
+use App\Enums\PaymentStatus;
 use App\Http\Helpers\Cart;
+use App\Models\Order;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 
 class CheckoutController extends Controller
@@ -10,11 +14,17 @@ class CheckoutController extends Controller
 {
     public function checkout(Request $request)
     {
+        /** @var \App\Models\User $user */
+        $user = $request->user();
         $stripe = new \Stripe\StripeClient(getenv('STRIPE_SECRET_KEY'));
         
         list($products, $cartItems) = Cart::getProductsAndCartItems();
         $lineItems = [];
+        $totalPrice = 0;
+        
         foreach ($products as $product) {
+            $quantity = $cartItems[$product->id]['quantity'];
+            $totalPrice = $product->price * $quantity;
             $lineItems[] = [
                 'price_data' => [
                     'currency' => 'usd',
@@ -27,7 +37,7 @@ class CheckoutController extends Controller
                
                 
             ],
-                'quantity' => $cartItems[$product->id]['quantity'],
+                'quantity' => $quantity,
             ];
         }
         // dd(route('checkout.success', [], true), route('checkout.failure', [], true));
@@ -36,8 +46,35 @@ class CheckoutController extends Controller
             'mode' => 'payment',
             'success_url' => route('checkout.success', [], true).'?session_id={CHECKOUT_SESSION_ID}',
             'cancel_url' => route('checkout.failure', [], true),
+
+            // always create a new customer during checkout
             'customer_creation' => 'always',
           ]);
+
+          $orderData = [
+             'total_price' => $totalPrice,
+             'status' => OrderStatus::Unpaid,
+             'created_by' => $user->id,
+             'updated_by' => $user->id,
+          ];
+
+            $order = Order::create($orderData);
+          
+
+            $paymentData = [
+                'order_id' => $order->id,
+                
+                'amount' => $totalPrice,
+                'status' => PaymentStatus::Pending,
+                'type' => 'cc',
+                'created_by' => $user->id,
+                'updated_by' => $user->id,
+                'session_id' => $checkout_session->id,
+            ];
+
+            Payment::create($paymentData);
+           
+            
         //   dd($checkout_session->id);
           return redirect($checkout_session->url);
     }
@@ -46,6 +83,8 @@ class CheckoutController extends Controller
         $stripe =new \Stripe\StripeClient(getenv('STRIPE_SECRET_KEY'));
          
         try {
+
+            $session_id = $_GET['session_id'];
             $session = $stripe->checkout->sessions->retrieve($_GET['session_id']);
 
             if(!$session){
@@ -54,8 +93,28 @@ class CheckoutController extends Controller
             
         // fix the custumer retrieval
         // dd($session);
+        
+        
+        $payment = Payment::query()->where(['session_id' => $session->id, 'status' => PaymentStatus::Pending])->get();
+
+        if(!$payment ){
+            return view('checkout.failure');
+        }
+
+        $payment->status = PaymentStatus::Paid;
+        $payment->update();
+
+        $order = $payment->order;
+        
+        echo '<pre>';
+        var_dump($order);
+        echo '</pre>';
+
+        $order->status = OrderStatus::Paid;
+        $order->update();
+
         $customer = $stripe->customers->retrieve($session->customer);
-        // dd($customer);
+
 
         return view('checkout.success', compact('customer'));
 
